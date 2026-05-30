@@ -36,8 +36,8 @@ app.use(cors({
 }));
 
 // MongoDB connection
-const mongoURL=process.env.MONGO_URI_LOCAL;
-// const mongoURL = process.env.MONGO_URI;
+// const mongoURL=process.env.MONGO_URI_LOCAL;
+const mongoURL = process.env.MONGO_URI;
 
 mongoose.connect(mongoURL, {
   useNewUrlParser: true,
