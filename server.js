@@ -4,7 +4,7 @@ const express = require("express");
 
 const app = express();
 
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.MAIN_PORT || 10000;
 
 // =============================
 // Start Node Backend
