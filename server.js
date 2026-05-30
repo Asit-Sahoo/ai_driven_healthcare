@@ -1,6 +1,7 @@
 const { spawn } = require("child_process");
 const path = require("path");
 const express = require("express");
+const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const app = express();
 
@@ -9,6 +10,7 @@ const PORT = process.env.MAIN_PORT || 10000;
 // =============================
 // Start Node Backend
 // =============================
+
 const backend = spawn("node", ["index.js"], {
   cwd: path.join(__dirname, "backend"),
   stdio: "inherit",
@@ -17,8 +19,8 @@ const backend = spawn("node", ["index.js"], {
 
 // =============================
 // Start ML Flask API
-// Folder: flask
 // =============================
+
 const mlApi = spawn("python", ["app.py"], {
   cwd: path.join(__dirname, "flask"),
   stdio: "inherit",
@@ -27,8 +29,8 @@ const mlApi = spawn("python", ["app.py"], {
 
 // =============================
 // Start Chatbot Flask API
-// Folder: Disease-Symptom-Prediction-Chatbot-main
 // =============================
+
 const chatbotApi = spawn("python", ["app.py"], {
   cwd: path.join(
     __dirname,
@@ -39,12 +41,24 @@ const chatbotApi = spawn("python", ["app.py"], {
 });
 
 // =============================
+// PROXY BACKEND ROUTES
+// =============================
+
+app.use(
+  "/api",
+  createProxyMiddleware({
+    target: "http://localhost:5003",
+    changeOrigin: true,
+  })
+);
+
+// =============================
 // Serve Frontend Build
 // =============================
 
 app.use(express.static(path.join(__dirname, "frontend/build")));
 
-app.use((req, res) => {
+app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend/build/index.html"));
 });
 

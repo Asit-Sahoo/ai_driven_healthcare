@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useUser } from './pages/UserContext'; // Import the useUser hook
 
-const API_URL = process.env.REACT_APP_API_URL;
+
 
 const Login = () => {
   const { login } = useUser(); // Get the login function from context
@@ -44,7 +44,7 @@ const Login = () => {
 
     try {
       console.log(requestBody);
-      const response = await fetch(`${API_URL}/api/login`, {
+      const response = await fetch(`/api/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
